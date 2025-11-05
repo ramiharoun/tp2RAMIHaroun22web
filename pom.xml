@@ -18,6 +18,21 @@
     </properties>
 
     <dependencies>
+
+            <!-- LangChain4j cœur -->
+            <dependency>
+                <groupId>dev.langchain4j</groupId>
+                <artifactId>langchain4j</artifactId>
+                <version>1.8.0</version>
+            </dependency>
+
+            <!-- Intégration Google AI Gemini -->
+            <dependency>
+                <groupId>dev.langchain4j</groupId>
+                <artifactId>langchain4j-google-ai-gemini</artifactId>
+                <version>1.8.0</version>
+            </dependency>
+
         <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>

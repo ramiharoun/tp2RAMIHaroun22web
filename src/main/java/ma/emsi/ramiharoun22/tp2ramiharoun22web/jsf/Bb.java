@@ -6,6 +6,7 @@ import jakarta.faces.model.SelectItem;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import ma.emsi.ramiharoun22.tp2ramiharoun22web.llm.LlmClient;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -55,6 +56,9 @@ public class Bb implements Serializable {
     /**
      * Contexte JSF. Utilisé pour qu'un message d'erreur s'affiche dans le formulaire.
      */
+    @Inject
+    private LlmClient llmClient;
+
     @Inject
     private FacesContext facesContext;
 
@@ -126,18 +130,19 @@ public class Bb implements Serializable {
         // Verrouiller le rôle système au premier message
         if (this.conversation.isEmpty()) {
             this.roleSystemeChangeable = false;
+            String systemInit = (roleSysteme == null || roleSysteme.isBlank())
+                    ? "You are a helpful assistant."
+                    : roleSysteme;
+            // On fixe le rôle système UNE fois au début de la conversation
+            llmClient.setSystemRole(systemInit);
         }
-
-        String system = (roleSysteme == null || roleSysteme.isBlank())
-                ? "You are a helpful assistant."
-                : roleSysteme;
 
         try {
             String q = question.trim();
-            // Appel au client LLM
-            this.reponse = llmClient.chat(system, q);
+            // Appel au client LLM (méthode d'instance)
+            this.reponse = llmClient.chat(q);
 
-            // Afficher dans la zone de transcript (utilise ton method existante)
+            // Afficher dans la zone de transcript
             afficherConversation();
         } catch (Exception e) {
             FacesMessage message = new FacesMessage(
